@@ -33,3 +33,20 @@ def katalog(update:Update, callback:CallbackContext):
         text="Katalogdan mahsulot tanlang",
         reply_markup=reply_markup,
     )
+
+def prodouct_type(update:Update, callback:CallbackContext):
+    query = update.callback_query
+    bot = callback.bot
+    id = query.message.chat.id
+    product_id = query.data.split("_")[1]
+    data:dict = db.get_prodouct_type(product_id)
+
+    keyboard = []
+    for i in data[0]["prodouct_typt"]:
+        keyboard.append([InlineKeyboardButton(text=i['name'],callback_data=f"product_type_{i['id']}")])
+
+    reply_markup = InlineKeyboardMarkup(keyboard)
+    query.edit_message_text(
+        text='Mahsulot turlaridan brini tanlang',
+        reply_markup=reply_markup
+    )

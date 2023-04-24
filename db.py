@@ -3,6 +3,8 @@ import requests
 bas_url = "https://ogabek007.pythonanywhere.com/"
 
 class DB:
+    def __init__(self):
+        self.count = 0
     def katalog(self):
         url = bas_url + "dafna_app/get_katalog/"
         response = requests.get(url)

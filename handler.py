@@ -56,10 +56,20 @@ def prodouct(update:Update, callback:CallbackContext):
     bot = callback.bot
     data:dict = db.get_product(id)
 
-    for i in data[0]["prodouct_type"]["prodoucts"]:
-        bot.sendPhoto(
-                chat_id=query.message.chat_id,
-                photo = "https://ogabek007.pythonanywhere.com/" + i['img_url'],
-                caption = f"name:{i['name']} \n price:{i['price']} \n discrpition:{i['discrpition']}\n color:{i['color']}\n manufacturer:{i['manufacturer']}\n material:{i['material']}",
-        )
+    db.count = range(len(data[0]["prodouct_type"]["prodoucts"]))
+    data = data[0]["prodouct_type"]["prodoucts"][db.count[0]]
+    bot.sendPhoto(
+            chat_id=query.message.chat_id,
+            photo = "https://ogabek007.pythonanywhere.com" + data['img_url'],
+            caption = f"name:{data['name']} \n price:{data['price']} \n discrpition:{data['discrpition']}\n color:{data['color']}\n manufacturer:{data['manufacturer']}\n material:{data['material']}",
+            reply_markup=InlineKeyboardMarkup([
+                            [InlineKeyboardButton(text="Orqaga⏮", callback_data="back"),
+                            InlineKeyboardButton(text="Buyurtma🛒", callback_data=f"buyurtma_{data['id']}"), 
+                            InlineKeyboardButton(text="Oldnga⏭", callback_data=f"next_{data['id']}")
+                            ]])
+            )
+
+    l = db.count
+    if len(l) >= 1:
+        db.count = l[1:]
     

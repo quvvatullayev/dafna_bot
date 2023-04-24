@@ -17,6 +17,7 @@ from telegram.ext import (
     CallbackContext,
 )
 from db import DB
+from pprint import pprint
 db = DB()
 
 def katalog(update:Update, callback:CallbackContext):
@@ -52,6 +53,13 @@ def prodouct_type(update:Update, callback:CallbackContext):
 def prodouct(update:Update, callback:CallbackContext):
     query = update.callback_query
     id = query.data.split("_")[2]
+    bot = callback.bot
     data:dict = db.get_product(id)
 
-    print(data)
+    for i in data[0]["prodouct_type"]["prodoucts"]:
+        bot.sendPhoto(
+                chat_id=query.message.chat_id,
+                photo = "https://ogabek007.pythonanywhere.com/" + i['img_url'],
+                caption = f"name:{i['name']} \n price:{i['price']} \n discrpition:{i['discrpition']}\n color:{i['color']}\n manufacturer:{i['manufacturer']}\n material:{i['material']}",
+        )
+    

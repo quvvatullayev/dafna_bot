@@ -56,8 +56,9 @@ def prodouct(update:Update, callback:CallbackContext):
     bot = callback.bot
     data:dict = db.get_product(id)
 
-    db.count = range(len(data[0]["prodouct_type"]["prodoucts"]))
+    db.count = list(range(len(data[0]["prodouct_type"]["prodoucts"])))
     data = data[0]["prodouct_type"]["prodoucts"][db.count[0]]
+    
     bot.sendPhoto(
             chat_id=query.message.chat_id,
             photo = "https://ogabek007.pythonanywhere.com" + data['img_url'],
@@ -65,11 +66,33 @@ def prodouct(update:Update, callback:CallbackContext):
             reply_markup=InlineKeyboardMarkup([
                             [InlineKeyboardButton(text="Orqaga⏮", callback_data="back"),
                             InlineKeyboardButton(text="Buyurtma🛒", callback_data=f"buyurtma_{data['id']}"), 
-                            InlineKeyboardButton(text="Oldnga⏭", callback_data=f"next_{data['id']}")
+                            InlineKeyboardButton(text="Oldnga⏭", callback_data=f"next_{data['id']}_{id}")
                             ]])
             )
 
     l = db.count
     if len(l) >= 1:
         db.count = l[1:]
-    
+
+  
+def next_prodouct(update:Update, callback:CallbackContext):
+    query = update.callback_query
+    id = query.data.split("_")[2]
+    bot = callback.bot
+    data:dict = db.get_product(id)
+
+    data = data[0]["prodouct_type"]["prodoucts"][db.count[0]]   
+    bot.sendPhoto(
+            chat_id=query.message.chat_id,
+            photo = "https://ogabek007.pythonanywhere.com" + data['img_url'],
+            caption = f"name:{data['name']} \n price:{data['price']} \n discrpition:{data['discrpition']}\n color:{data['color']}\n manufacturer:{data['manufacturer']}\n material:{data['material']}",
+            reply_markup=InlineKeyboardMarkup([
+                            [InlineKeyboardButton(text="Orqaga⏮", callback_data="back"),
+                            InlineKeyboardButton(text="Buyurtma🛒", callback_data=f"buyurtma_{data['id']}"), 
+                            InlineKeyboardButton(text="Oldnga⏭", callback_data=f"next_{data['id']}_{id}")
+                            ]])
+            )
+
+    l = db.count
+    if len(l) >= 1:
+        db.count = l[1:]

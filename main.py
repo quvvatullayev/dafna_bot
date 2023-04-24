@@ -18,7 +18,7 @@ updater = Updater(token=TOKEN, use_context=True)
 
 updater.dispatcher.add_handler(CommandHandler('start', start))
 updater.dispatcher.add_handler(MessageHandler(Filters.text("🛍Katalog"), katalog))
-updater.dispatcher.add_handler(CallbackQueryHandler(prodouct_type, pattern="product_"))
+updater.dispatcher.add_handler(CallbackQueryHandler(prodouct_type, pattern="katalog_"))
 
 updater.start_polling()
 updater.idle()

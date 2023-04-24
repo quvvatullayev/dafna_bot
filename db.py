@@ -13,3 +13,9 @@ class DB:
         response = requests.get(url)
         count = len(response.json()['prodouct_typt'])
         return [response.json(), count]
+    
+    def get_product(self, id):
+        url = bas_url + f"dafna_app/get_prodouct/{id}/"
+        response = requests.get(url)
+        count = len(response.json()['prodouct_typt']["prodoucts"])
+        return [response.json(), count]
